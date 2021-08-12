@@ -1,0 +1,31 @@
+{
+  "customers": [
+    {
+      "id": "auth0|12324567890",
+      "name": "Autonomous Dan",
+      "email": {
+        "value": "dan@example.com",
+        "verified": true
+      },
+      "phoneNumber": {
+        "value": "8008008080",
+        "verified": true
+      },
+      "accountId": "1628722512742"
+    }
+  ],
+  "accounts": [
+    {
+      "id": "1628722512742",
+      "customerId": "auth0|12324567890",
+      "createdAt": 1628722512742,
+      "balance": 720,
+      "perks": [
+        {
+          "code": "5OFF",
+          "description": "5% off entire sale"
+        }
+      ]
+    }
+  ]
+}
