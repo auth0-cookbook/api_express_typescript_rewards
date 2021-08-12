@@ -1,48 +1,20 @@
+import * as dotenv from "dotenv";
 import express, { Request, Response } from "express";
+import { auth } from "express-oauth2-jwt-bearer";
+import { findCustomerById } from "../customers/customers.service";
 import {
-  findAccountById,
+  adjustBalance,
   createAccount,
-  findAllAccounts,
+  findAccountByCustomerId,
 } from "./accounts.service";
 
-const { checkJwt } = require("../authz/check-jwt");
+dotenv.config();
 
 const accountsRouter = express.Router();
 
-accountsRouter.use(checkJwt);
+accountsRouter.use(auth());
 
-// GET /api/accounts
-
-accountsRouter.get("/", async (request: Request, response: Response) => {
-  const accountRecord = await findAllAccounts();
-
-  if (accountRecord === undefined) {
-    response.sendStatus(404);
-    return;
-  }
-
-  response.json(accountRecord);
-});
-
-// GET /api/accounts/:id
-
-accountsRouter.get(
-  "/:id",
-  async (request: Request<{ id: string }>, response: Response) => {
-    const id = parseInt(request.params.id, 10);
-
-    const accountRecord = await findAccountById(id);
-
-    if (accountRecord === undefined) {
-      response.sendStatus(404);
-      return;
-    }
-
-    response.json(accountRecord);
-  }
-);
-
-// POST /api/accounts/
+// Create rewards account
 
 accountsRouter.post(
   "/",
@@ -50,11 +22,57 @@ accountsRouter.post(
     request: Request<{}, {}, { customerId: string }>,
     response: Response
   ) => {
-    const { customerId } = request.body;
+    const customerId = request.body.customerId;
+    const customer = await findCustomerById(customerId);
 
-    await createAccount(parseInt(customerId, 10));
+    if (!customer) {
+      response.sendStatus(500);
+      return;
+    }
 
-    response.sendStatus(200);
+    const newAccount = await createAccount(customerId);
+
+    response.json(newAccount);
+  }
+);
+
+// Retrieve rewards account using customerId
+
+accountsRouter.get(
+  "/:customerId",
+  async (request: Request<{ customerId: string }>, response: Response) => {
+    const customerId = request.params.customerId;
+
+    const accountRecord = await findAccountByCustomerId(customerId);
+
+    if (accountRecord) {
+      response.json(accountRecord);
+      return;
+    }
+
+    response.sendStatus(404);
+  }
+);
+
+// Accumulate reward points
+
+accountsRouter.post(
+  "/:id/adjust",
+  async (
+    request: Request<{ id: string }, {}, { points: number }>,
+    response: Response
+  ) => {
+    const id = request.params.id;
+    const points = request.body.points;
+
+    const newBalance = await adjustBalance(id, points);
+
+    if (newBalance) {
+      response.sendStatus(200);
+      return;
+    }
+
+    response.sendStatus(404);
   }
 );
 

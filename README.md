@@ -6,20 +6,16 @@ As part of the setup process, you'll also learn how to quickly host this API on 
 
 ## 1. Get Started
 
-There are two ways to get started: you can work with a local repository or you can work with a cloud project using Glitch.
-
-### Use a local repository
-
 Clone the repository: 
 
 ```bash
-git clone git@github.com:auth0-cookbook/api_express_javascript_rewards.git
+git clone git@github.com:auth0-cookbook/api_express_javascript_rewards.git typescript-rewards
 ```
 
 Make the project directory your current directory:
 
 ```bash
-cd api_express_javascript_rewards
+cd typescript-rewards
 ```
 
 Install the project dependencies:
@@ -34,21 +30,21 @@ Create a `.env` file under the project directory:
 .env
 ```
 
+Populate `.env` as follows:
+
+```bash
+PORT=6060
+ISSUER_BASE_URL=https://<YOUR_AUTH0_DOMAIN>
+AUDIENCE=<YOUR_AUTH0_API_IDENTIFIER>
+```
+
+Rename the `database.example.json` file present under `src/database` to `database.json`.
+
 Finally, run the project:
 
 ```bash
 npm start
 ```
-
-### Use Glitch, an online IDE
-
-Glitch lets you edit a Node.js project on the cloud and create a live server quickly.
-
-Open this Glitch project: [https://glitch.com/edit/#!/api--express--javascript--rewards](https://glitch.com/edit/#!/api--express--javascript--rewards?path=README.md%3A1%3A0)
-
-Click on the **"Remix to Edit"** button in the top-right corner.
-
-That's it!
 
 ### API Endpoints
 
