@@ -5,9 +5,7 @@ export interface Profile {
     customerId: string;
     name: string;
     email: string;
-    emailVerified: boolean;
-    phoneNumber: string;
-    phoneNumberVerified: boolean;
+    phoneNumber: string | null;
   };
   rewards?: {
     accountId: string;

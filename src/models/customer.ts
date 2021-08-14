@@ -1,12 +1,7 @@
-export interface CustomerDataValue {
-  value: string;
-  verified: boolean;
-}
-
 export interface Customer {
   id: string;
   name: string;
-  email: CustomerDataValue;
-  phoneNumber: CustomerDataValue;
+  email: string;
+  phoneNumber: string | null;
   accountId?: string;
 }

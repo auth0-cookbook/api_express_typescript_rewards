@@ -1,6 +1,7 @@
+import { getPhoneNumber } from "../auth0/management-api";
 import { customersCollection } from "../database/database.service";
 import { Customer } from "../models/customer";
-import { NewCustomerPayload } from "src/models/payloads/new-customer-payload";
+import { NewCustomerPayload } from "../models/payloads/new-customer-payload";
 
 export const findAllCustomers = async (): Promise<Customer[] | null> => {
   return customersCollection.value() || null;
@@ -15,26 +16,15 @@ export const findCustomerById = async (
 export const createCustomer = async (
   data: NewCustomerPayload
 ): Promise<Customer> => {
-  const {
-    id,
-    name,
-    email,
-    emailVerified,
-    phoneNumber,
-    phoneNumberVerified,
-  } = data;
+  const { id, name, email } = data;
+
+  const phoneNumber = await getPhoneNumber(id);
 
   const newCustomer: Customer = {
     id,
     name,
-    email: {
-      value: email,
-      verified: emailVerified,
-    },
-    phoneNumber: {
-      value: phoneNumber,
-      verified: phoneNumberVerified,
-    },
+    email,
+    phoneNumber: phoneNumber || null,
   };
 
   customersCollection.push(newCustomer).write();
