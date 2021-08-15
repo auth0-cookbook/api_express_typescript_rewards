@@ -18,17 +18,17 @@ if (!process.env.PORT) {
 const PORT: number = parseInt(process.env.PORT, 10);
 
 const app = express();
-const rewardsApiRouter = express.Router();
+const apiRouter = express.Router();
 
 app.use(cors());
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api", rewardsApiRouter);
-rewardsApiRouter.use("/rewards/accounts", accountsRouter);
-rewardsApiRouter.use("/rewards/customers", customersRouter);
-rewardsApiRouter.use("/rewards/profiles", profilesRouter);
+app.use("/api", apiRouter);
+apiRouter.use("/accounts", accountsRouter);
+apiRouter.use("/customers", customersRouter);
+apiRouter.use("/profiles", profilesRouter);
 
 app.get("*", (req: Request, res: Response) => {
   const undefinedResourceError: HttpException = {
